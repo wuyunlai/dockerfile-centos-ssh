@@ -1,26 +1,26 @@
-#Dockerfile centos-ssh
-# Ñ¡ÔñÒ»¸öÒÑÓĞµÄos¾µÏñ×÷Îª»ù´¡
+ï»¿#Dockerfile centos-with-ssh
+# é€‰æ‹©ä¸€ä¸ªå·²æœ‰çš„osé•œåƒä½œä¸ºåŸºç¡€
 FROM centos:latest
 
-# ¾µÏñµÄ×÷Õß
+# é•œåƒçš„ä½œè€…
 MAINTAINER wuyl
 
-# °²×°openssh-serverºÍsudoÈí¼ş°ü£¬²¢ÇÒ½«sshdµÄUsePAM²ÎÊıÉèÖÃ³Éno
+# å®‰è£…openssh-serverå’Œsudoè½¯ä»¶åŒ…ï¼Œå¹¶ä¸”å°†sshdçš„UsePAMå‚æ•°è®¾ç½®æˆno
 RUN yum install -y openssh-server sudo nano
 RUN sed -i 's/UsePAM yes/UsePAM no/g' /etc/ssh/sshd_config
 
-#°²×°openssh-clients
+#å®‰è£…openssh-clients
 RUN yum install -y openssh-clients
 
-# Ìí¼Ó²âÊÔÓÃ»§root£¬ÃÜÂëroot£¬²¢ÇÒ½«´ËÓÃ»§Ìí¼Óµ½sudoersÀï
+# æ·»åŠ æµ‹è¯•ç”¨æˆ·rootï¼Œå¯†ç rootï¼Œå¹¶ä¸”å°†æ­¤ç”¨æˆ·æ·»åŠ åˆ°sudoersé‡Œ
 RUN echo "root:root" | chpasswd
 RUN echo "root ALL=(ALL) ALL" >> /etc/sudoers
 
-# ÏÂÃæÕâÁ½¾ä±È½ÏÌØÊâ£¬ÔÚcentos6ÉÏ±ØĞëÒªÓĞ£¬·ñÔò´´½¨³öÀ´µÄÈİÆ÷sshd²»ÄÜµÇÂ¼
+# ä¸‹é¢è¿™ä¸¤å¥æ¯”è¾ƒç‰¹æ®Šï¼Œåœ¨centos6ä¸Šå¿…é¡»è¦æœ‰ï¼Œå¦åˆ™åˆ›å»ºå‡ºæ¥çš„å®¹å™¨sshdä¸èƒ½ç™»å½•
 RUN ssh-keygen -t dsa -f /etc/ssh/ssh_host_dsa_key
 RUN ssh-keygen -t rsa -f /etc/ssh/ssh_host_rsa_key
 
-# Æô¶¯sshd·şÎñ²¢ÇÒ±©Â¶22¶Ë¿Ú
+# å¯åŠ¨sshdæœåŠ¡å¹¶ä¸”æš´éœ²22ç«¯å£
 RUN mkdir /var/run/sshd
 EXPOSE 22
 CMD ["/usr/sbin/sshd", "-D"]
